@@ -21,6 +21,9 @@ package org.sonar.plugins.javascript;
 
 import org.junit.Test;
 import org.sonar.api.Plugin.Context;
+import org.sonar.api.SonarProduct;
+import org.sonar.api.SonarQubeSide;
+import org.sonar.api.SonarRuntime;
 import org.sonar.api.utils.Version;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -29,9 +32,9 @@ public class JavaScriptPluginTest {
 
   @Test
   public void get_extensions() throws Exception {
-    Context context = new Context(Version.create(5, 6));
+    Context context = new Context(new SonarRuntime(Version.create(5, 6), SonarProduct.SONARQUBE, SonarQubeSide.SCANNER));
     new JavaScriptPlugin().define(context);
-    assertThat(context.getExtensions()).hasSize(13);
+    assertThat(context.getExtensions()).hasSize(10);
   }
 
 }

@@ -24,9 +24,6 @@ import org.sonar.api.PropertyType;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.javascript.tree.symbols.type.JQuery;
-import org.sonar.plugins.javascript.lcov.ITCoverageSensor;
-import org.sonar.plugins.javascript.lcov.OverallCoverageSensor;
-import org.sonar.plugins.javascript.lcov.UTCoverageSensor;
 import org.sonar.plugins.javascript.rules.JavaScriptRulesDefinition;
 
 public class JavaScriptPlugin implements Plugin {
@@ -36,7 +33,6 @@ public class JavaScriptPlugin implements Plugin {
   private static final String GENERAL = "General";
   private static final String TEST_AND_COVERAGE = "Tests and Coverage";
   private static final String LIBRARIES = "Libraries";
-
 
   // Global JavaScript constants
 
@@ -62,16 +58,13 @@ public class JavaScriptPlugin implements Plugin {
 
   @Override
   public void define(Context context) {
+
     context.addExtensions(
+      JavaScriptProfile.class,
       JavaScriptLanguage.class,
 
       JavaScriptSquidSensor.class,
       JavaScriptRulesDefinition.class,
-      JavaScriptProfile.class,
-
-      UTCoverageSensor.class,
-      ITCoverageSensor.class,
-      OverallCoverageSensor.class,
 
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)
         .defaultValue(FILE_SUFFIXES_DEFVALUE)
@@ -121,7 +114,7 @@ public class JavaScriptPlugin implements Plugin {
         .description("Comma-separated list of names used to address jQuery object.")
         .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
         .subCategory(LIBRARIES)
-        .build()
-    );
+        .build());
+
   }
 }

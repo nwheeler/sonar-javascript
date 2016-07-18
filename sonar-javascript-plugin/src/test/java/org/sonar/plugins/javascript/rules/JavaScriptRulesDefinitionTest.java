@@ -45,6 +45,9 @@ public class JavaScriptRulesDefinitionTest {
     assertThat(alertUseRule.name()).isEqualTo("Array and Object constructors should not be used");
 
     for (Rule rule : repository.rules()) {
+      if (rule.key().equals("S1442")) {
+        assertThat(rule.activatedByDefault()).isTrue();
+      }
       for (Param param : rule.params()) {
         assertThat(param.description()).as("description for " + param.key()).isNotEmpty();
       }

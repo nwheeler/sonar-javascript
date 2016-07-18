@@ -66,7 +66,7 @@
   <properties>
     <license.title>SonarQube JavaScript Plugin</license.title>
 
-    <sonar.version>5.6</sonar.version>
+    <sonar.version>6.0-build11912</sonar.version>
     <sslr.version>1.21</sslr.version>
     <orchestrator.version>3.10.1</orchestrator.version>
     <gitRepositoryName>sonar-javascript</gitRepositoryName>
@@ -121,7 +121,7 @@
       <dependency>
         <groupId>org.sonarsource.sslr-squid-bridge</groupId>
         <artifactId>sslr-squid-bridge</artifactId>
-        <version>2.6.1</version>
+        <version>2.7-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <groupId>org.codehaus.sonar.sslr</groupId>

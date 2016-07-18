@@ -24,6 +24,7 @@ import com.sonar.sslr.api.RecognitionException;
 import java.io.File;
 import java.io.InterruptedIOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import org.apache.commons.lang.NotImplementedException;
 import org.junit.Before;
@@ -42,7 +43,6 @@ import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.config.Settings;
-import org.sonar.api.internal.google.common.base.Charsets;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
@@ -89,7 +89,7 @@ public class JavaScriptSquidSensorTest {
 
     @Override
     public Class[] checkClasses() {
-      return new Class[]{MyCustomRule.class};
+      return new Class[] {MyCustomRule.class};
     }
   }};
 
@@ -145,7 +145,6 @@ public class JavaScriptSquidSensorTest {
     inputFile(relativePath);
 
     String parsingErrorCheckKey = "ParsingError";
-
 
     ActiveRules activeRules = (new ActiveRulesBuilder())
       .create(RuleKey.of(CheckList.REPOSITORY_KEY, parsingErrorCheckKey))
@@ -234,7 +233,7 @@ public class JavaScriptSquidSensorTest {
     thrown.expect(AnalysisException.class);
     thrown.expectMessage(expectedMessageSubstring);
     try {
-      sensor.analyseFiles(context, ImmutableList.of((TreeVisitor)check), ImmutableList.of(inputFile), progressReport);
+      sensor.analyseFiles(context, ImmutableList.of((TreeVisitor) check), ImmutableList.of(inputFile), progressReport);
     } finally {
       verify(progressReport).cancel();
     }
@@ -261,7 +260,7 @@ public class JavaScriptSquidSensorTest {
 
     context.fileSystem().add(inputFile);
 
-    return inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
+    return inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), StandardCharsets.UTF_8));
   }
 
   private final class ExceptionRaisingCheck extends DoubleDispatchVisitorCheck {

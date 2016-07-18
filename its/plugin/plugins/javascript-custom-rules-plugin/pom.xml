@@ -35,11 +35,12 @@
       <plugin>
         <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
-        <version>1.15</version>
+        <version>1.17-build269</version>
         <extensions>true</extensions>
         <configuration>
           <pluginClass>org.sonar.samples.javascript.JavaScriptCustomRulesPlugin</pluginClass>
           <basePlugin>javascript</basePlugin>
+          <sonarLintSupported>true</sonarLintSupported>
         </configuration>
       </plugin>
 

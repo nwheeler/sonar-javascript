@@ -20,6 +20,7 @@
 package org.sonar.javascript.cpd;
 
 import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +34,6 @@ import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.internal.google.common.io.Files;
 import org.sonar.duplications.internal.pmd.TokensLine;
 import org.sonar.javascript.parser.JavaScriptParserBuilder;
 import org.sonar.javascript.visitors.JavaScriptVisitorContext;
@@ -58,7 +58,7 @@ public class CpdVisitorTest {
   @Test
   public void test() throws Exception {
     scan("var x = 'a' + 1 + 'line1';\nvar y = 2;\n");
-    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + inputFile.getFile().getName());
+    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens(inputFile.key());
     assertThat(cpdTokenLines).hasSize(2);
     TokensLine firstTokensLine = cpdTokenLines.get(0);
     assertThat(firstTokensLine.getValue()).isEqualTo("varx=LITERAL+1+LITERAL;");
@@ -89,7 +89,7 @@ public class CpdVisitorTest {
 
     sensorContext = SensorContextTester.create(tempFolder.getRoot().toPath());
     CpdVisitor cpdVisitor = new CpdVisitor(fileSystem, sensorContext);
-    ScriptTree tree = (ScriptTree)p.parse(file);
+    ScriptTree tree = (ScriptTree) p.parse(file);
     TreeVisitorContext visitorContext = new JavaScriptVisitorContext(tree, file, null);
     cpdVisitor.scanTree(visitorContext);
   }

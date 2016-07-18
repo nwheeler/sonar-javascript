@@ -19,6 +19,8 @@
  */
 package org.sonar.javascript.highlighter;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import java.io.File;
 import java.util.Collection;
 import org.junit.Test;
@@ -29,8 +31,6 @@ import org.sonar.api.batch.fs.internal.DefaultTextRange;
 import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
-import org.sonar.api.internal.google.common.base.Charsets;
-import org.sonar.api.internal.google.common.io.Files;
 import org.sonar.javascript.utils.JavaScriptTreeModelTest;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -114,7 +114,6 @@ public class HighlightSymbolTableBuilderTest extends JavaScriptTreeModelTest {
     String key = "moduleKey:" + filename;
 
     HighlightSymbolTableBuilder.build(newSymbolTable(filename), context(inputFile.file()));
-
 
     // class
     assertThat(references(key, 1, 6)).containsOnly(textRange(7, 16, 17));

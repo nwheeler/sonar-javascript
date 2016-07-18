@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -100,8 +101,7 @@ public class JavaScriptSquidSensor implements Sensor {
 
   public JavaScriptSquidSensor(
     CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter,
-    Settings settings, @Nullable CustomJavaScriptRulesDefinition[] customRulesDefinition
-  ) {
+    Settings settings, @Nullable CustomJavaScriptRulesDefinition[] customRulesDefinition) {
 
     this.checks = JavaScriptChecks.createJavaScriptCheck(checkFactory)
       .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
@@ -149,8 +149,12 @@ public class JavaScriptSquidSensor implements Sensor {
 
     } catch (RecognitionException e) {
       checkInterrupted(e);
-      LOG.error("Unable to parse file: " + inputFile.absolutePath());
-      LOG.error(e.getMessage());
+      LOG.debug("Unable to parse file: " + inputFile.absolutePath(), e);
+      sensorContext.newAnalysisError()
+        .onFile(inputFile)
+        .message(e.getMessage())
+        .at(inputFile.newPointer(e.getLine(), 0))
+        .save();
       processRecognitionException(e, sensorContext, inputFile);
 
     } catch (Exception e) {
@@ -207,7 +211,6 @@ public class JavaScriptSquidSensor implements Sensor {
     saveFileIssues(sensorContext, fileIssues, inputFile);
   }
 
-
   private static void highlightSymbols(NewSymbolTable newSymbolTable, TreeVisitorContext context) {
     HighlightSymbolTableBuilder.build(newSymbolTable, context);
   }
@@ -222,7 +225,7 @@ public class JavaScriptSquidSensor implements Sensor {
         saveLineIssue(sensorContext, inputFile, ruleKey, (LineIssue) issue);
 
       } else {
-        savePreciseIssue(sensorContext, inputFile, ruleKey, (PreciseIssue)issue);
+        savePreciseIssue(sensorContext, inputFile, ruleKey, (PreciseIssue) issue);
       }
     }
   }
@@ -244,7 +247,6 @@ public class JavaScriptSquidSensor implements Sensor {
     newIssue.save();
   }
 
-
   private static NewIssueLocation newLocation(InputFile inputFile, NewIssue issue, IssueLocation location) {
     TextRange range = inputFile.newRange(
       location.startLine(), location.startLineOffset(), location.endLine(), location.endLineOffset());
@@ -258,7 +260,6 @@ public class JavaScriptSquidSensor implements Sensor {
     }
     return newLocation;
   }
-
 
   private RuleKey ruleKey(JavaScriptCheck check) {
     Preconditions.checkNotNull(check);
@@ -308,7 +309,9 @@ public class JavaScriptSquidSensor implements Sensor {
 
     analyseFiles(context, treeVisitors, fileSystem.inputFiles(mainFilePredicate), progressReport);
 
-    executeCoverageSensors(context, linesOfCode);
+    if (context.getRuntimeProduct() != SonarProduct.SONARLINT) {
+      executeCoverageSensors(context, linesOfCode);
+    }
   }
 
   private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> linesOfCode) {

@@ -25,6 +25,7 @@ import org.sonar.api.ExtensionPoint;
 import org.sonar.api.batch.BatchSide;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
+import org.sonarsource.api.sonarlint.SonarLintSide;
 
 /**
  * Extension point to create custom rule repository for JavaScript.
@@ -32,6 +33,7 @@ import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 @Beta
 @ExtensionPoint
 @BatchSide
+@SonarLintSide
 public abstract class CustomJavaScriptRulesDefinition implements RulesDefinition {
 
   /**

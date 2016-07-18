@@ -21,6 +21,7 @@ package org.sonar.plugins.javascript.lcov;
 
 import com.google.common.collect.ImmutableSet;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +34,6 @@ import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.Settings;
-import org.sonar.api.internal.google.common.base.Charsets;
 import org.sonar.plugins.javascript.JavaScriptPlugin;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -72,7 +72,7 @@ public class CoverageSensorTest {
       .setLanguage("js")
       .setType(type);
 
-    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
+    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), StandardCharsets.UTF_8));
     context.fileSystem().add(inputFile);
 
     return inputFile;
@@ -101,14 +101,14 @@ public class CoverageSensorTest {
 
       assertThat(context.lineHits("moduleKey:file2.js", CoverageType.UNIT, line)).isEqualTo(file2Expected[line - 1]);
       assertThat(context.lineHits("moduleKey:file3.js", CoverageType.UNIT, line)).isNull();
-      assertThat(context.lineHits("moduleKey:tests/file1.js", CoverageType.UNIT, line)).isNull();;
+      assertThat(context.lineHits("moduleKey:tests/file1.js", CoverageType.UNIT, line)).isNull();
+      ;
     }
 
     assertThat(context.conditions("moduleKey:file1.js", CoverageType.UNIT, 1)).isNull();
     assertThat(context.conditions("moduleKey:file1.js", CoverageType.UNIT, 2)).isEqualTo(4);
     assertThat(context.coveredConditions("moduleKey:file1.js", CoverageType.UNIT, 2)).isEqualTo(2);
   }
-
 
   @Test
   public void test_it_coverage() {
