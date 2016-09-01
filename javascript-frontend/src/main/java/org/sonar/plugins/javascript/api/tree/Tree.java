@@ -43,6 +43,7 @@ import org.sonar.plugins.javascript.api.tree.declaration.ObjectBindingPatternTre
 import org.sonar.plugins.javascript.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.javascript.api.tree.declaration.SpecifierListTree;
 import org.sonar.plugins.javascript.api.tree.declaration.SpecifierTree;
+import org.sonar.plugins.javascript.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.javascript.api.tree.expression.ArrayLiteralTree;
 import org.sonar.plugins.javascript.api.tree.expression.ArrowFunctionTree;
 import org.sonar.plugins.javascript.api.tree.expression.AssignmentExpressionTree;
@@ -57,6 +58,7 @@ import org.sonar.plugins.javascript.api.tree.expression.LiteralTree;
 import org.sonar.plugins.javascript.api.tree.expression.MemberExpressionTree;
 import org.sonar.plugins.javascript.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.javascript.api.tree.expression.NewTargetTree;
+import org.sonar.plugins.javascript.api.tree.expression.ObjectAssignmentPatternTree;
 import org.sonar.plugins.javascript.api.tree.expression.ObjectLiteralTree;
 import org.sonar.plugins.javascript.api.tree.expression.PairPropertyTree;
 import org.sonar.plugins.javascript.api.tree.expression.ParenthesisedExpressionTree;
@@ -806,6 +808,16 @@ public interface Tree {
      * {@link ArrayBindingPatternTree}
      */
     ARRAY_BINDING_PATTERN(ArrayBindingPatternTree.class),
+
+    /**
+     * {@link ArrayAssignmentPatternTree}
+     */
+    ARRAY_ASSIGNMENT_PATTERN(ArrayAssignmentPatternTree.class),
+
+    /**
+     * {@link ObjectAssignmentPatternTree}
+     */
+    OBJECT_ASSIGNMENT_PATTERN(ObjectAssignmentPatternTree.class),
 
     /**
      * {@link DefaultExportDeclarationTree}
