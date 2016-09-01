@@ -19,57 +19,56 @@
  */
 package org.sonar.javascript.tree.impl.expression;
 
-import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
-import com.sonar.sslr.api.typed.Optional;
 import java.util.Iterator;
 import org.sonar.javascript.tree.impl.JavaScriptTree;
 import org.sonar.javascript.tree.impl.SeparatedList;
 import org.sonar.plugins.javascript.api.symbols.TypeSet;
 import org.sonar.plugins.javascript.api.tree.Tree;
-import org.sonar.plugins.javascript.api.tree.expression.ArrayAssignmentPatternTree;
+import org.sonar.plugins.javascript.api.tree.expression.ObjectAssignmentPatternTree;
 import org.sonar.plugins.javascript.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.javascript.api.visitors.DoubleDispatchVisitor;
 
-public class ArrayAssignmentPatternTreeImpl extends JavaScriptTree implements ArrayAssignmentPatternTree {
+public class ObjectAssignmentPatternTreeImpl extends JavaScriptTree implements ObjectAssignmentPatternTree {
 
-  private final SyntaxToken openBracketToken;
-  private final SeparatedList<Optional<Tree>> elements;
-  private final SyntaxToken closeBracketToken;
 
-  public ArrayAssignmentPatternTreeImpl(SyntaxToken openBracketToken, SeparatedList<Optional<Tree>> elements, SyntaxToken closeBracketToken) {
-    this.openBracketToken = openBracketToken;
+  private final SyntaxToken openBraceToken;
+  private final SeparatedList<Tree> elements;
+  private final SyntaxToken closeBraceToken;
+
+  public ObjectAssignmentPatternTreeImpl(SyntaxToken openBraceToken, SeparatedList<Tree> elements, SyntaxToken closeBraceToken) {
+    this.openBraceToken = openBraceToken;
     this.elements = elements;
-    this.closeBracketToken = closeBracketToken;
+    this.closeBraceToken = closeBraceToken;
   }
 
   @Override
   public Kind getKind() {
-    return Kind.ARRAY_ASSIGNMENT_PATTERN;
+    return Kind.OBJECT_ASSIGNMENT_PATTERN;
   }
 
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
-      Iterators.singletonIterator(openBracketToken),
-      elements.elementsAndSeparators(new ElidedElementFilter()),
-      Iterators.singletonIterator(closeBracketToken)
-    );
+      Iterators.singletonIterator(openBraceToken),
+      elements.elementsAndSeparators(Functions.identity()),
+      Iterators.singletonIterator(closeBraceToken));
   }
 
   @Override
-  public SyntaxToken openBracketToken() {
-    return openBracketToken;
+  public SyntaxToken openBraceToken() {
+    return openBraceToken;
   }
 
   @Override
-  public SeparatedList<Optional<Tree>> elements() {
+  public SeparatedList<Tree> elements() {
     return elements;
   }
 
   @Override
-  public SyntaxToken closeBracketToken() {
-    return closeBracketToken;
+  public SyntaxToken closeBraceToken() {
+    return closeBraceToken;
   }
 
   @Override
@@ -79,18 +78,6 @@ public class ArrayAssignmentPatternTreeImpl extends JavaScriptTree implements Ar
 
   @Override
   public void accept(DoubleDispatchVisitor visitor) {
-    visitor.visitArrayAssignmentPattern(this);
-  }
-
-  private static class ElidedElementFilter implements Function<Optional<Tree>, Tree> {
-
-    @Override
-    public Tree apply(Optional<Tree> e) {
-      if (e.isPresent()) {
-        return e.get();
-      }
-      return null;
-    }
-
+    visitor.visitObjectAssignmentPattern(this);
   }
 }

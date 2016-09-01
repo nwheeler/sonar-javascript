@@ -23,52 +23,50 @@ import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import org.sonar.javascript.tree.impl.JavaScriptTree;
 import org.sonar.plugins.javascript.api.tree.Tree;
-import org.sonar.plugins.javascript.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.javascript.api.tree.expression.InitializedAssignmentPatternElementTree;
+import org.sonar.plugins.javascript.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.javascript.api.tree.expression.ObjectAssignmentPatternPairElementTree;
 import org.sonar.plugins.javascript.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.javascript.api.visitors.DoubleDispatchVisitor;
 
-import static org.sonar.plugins.javascript.api.tree.Tree.Kind.INITIALIZED_ASSIGNMENT_PATTERN_ELEMENT;
+public class ObjectAssignmentPatternPairElementTreeImpl extends JavaScriptTree implements ObjectAssignmentPatternPairElementTree {
 
-public class InitializedAssignmentPatternElementTreeImpl extends JavaScriptTree implements InitializedAssignmentPatternElementTree {
+  private final IdentifierTree key;
+  private final SyntaxToken colonToken;
+  private final Tree element;
 
-  private final ExpressionTree left;
-  private final SyntaxToken equalToken;
-  private final ExpressionTree right;
-
-  public InitializedAssignmentPatternElementTreeImpl(ExpressionTree left, SyntaxToken equalToken, ExpressionTree right) {
-    this.left = left;
-    this.equalToken = equalToken;
-    this.right = right;
+  public ObjectAssignmentPatternPairElementTreeImpl(IdentifierTree key, SyntaxToken colonToken, Tree element) {
+    this.key = key;
+    this.colonToken = colonToken;
+    this.element = element;
   }
 
   @Override
   public Kind getKind() {
-    return INITIALIZED_ASSIGNMENT_PATTERN_ELEMENT;
+    return Kind.OBJECT_ASSIGNMENT_PATTERN_PAIR_ELEMENT;
   }
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(left, equalToken, right);
+    return Iterators.forArray(key, colonToken, element);
   }
 
   @Override
-  public ExpressionTree left() {
-    return left;
+  public IdentifierTree key() {
+    return key;
   }
 
   @Override
-  public SyntaxToken equalToken() {
-    return equalToken;
+  public SyntaxToken colonToken() {
+    return colonToken;
   }
 
   @Override
-  public ExpressionTree right() {
-    return right;
+  public Tree element() {
+    return element;
   }
 
   @Override
   public void accept(DoubleDispatchVisitor visitor) {
-    visitor.visitInitializedAssignmentPatternElement(this);
+    visitor.visitObjectAssignmentPatternPairElement(this);
   }
 }
