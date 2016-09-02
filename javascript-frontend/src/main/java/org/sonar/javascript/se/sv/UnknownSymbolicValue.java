@@ -32,7 +32,7 @@ public enum UnknownSymbolicValue implements SymbolicValue {
   UNKNOWN;
 
   @Override
-  public List<ProgramState> constrain(ProgramState state, Constraint constraint) {
+  public List<ProgramState> constrainDependencies(ProgramState state, Constraint constraint) {
     return ImmutableList.of(state);
   }
 

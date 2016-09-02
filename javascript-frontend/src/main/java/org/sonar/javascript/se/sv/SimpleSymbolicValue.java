@@ -41,12 +41,8 @@ public class SimpleSymbolicValue implements SymbolicValue {
   }
 
   @Override
-  public List<ProgramState> constrain(ProgramState state, Constraint constraint) {
-    ProgramState newState = state.constrain(this, constraint);
-    if (newState == null) {
-      return ImmutableList.of();
-    }
-    return ImmutableList.of(newState);
+  public List<ProgramState> constrainDependencies(ProgramState state, Constraint constraint) {
+    return ImmutableList.of(state);
   }
 
   @Override

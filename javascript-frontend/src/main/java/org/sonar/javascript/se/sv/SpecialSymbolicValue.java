@@ -36,7 +36,7 @@ public enum SpecialSymbolicValue implements SymbolicValue {
   }
 
   @Override
-  public List<ProgramState> constrain(ProgramState state, Constraint constraint) {
+  public List<ProgramState> constrainDependencies(ProgramState state, Constraint constraint) {
     if (this.constraint.isIncompatibleWith(constraint)) {
       return ImmutableList.of();
     }
