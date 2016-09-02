@@ -1,4 +1,7 @@
-function sayHello() {
+function sayHello(c) {
+  if (c) {
+    foo();
+  }
   if (a == b) {     // Noncompliant {{Replace "==" with "===".}}
 //      ^^
   }
@@ -12,9 +15,11 @@ function sayHello() {
   }
   if (a == null) {  // OK
   }
+
+  foo(c);
 }
 
-function withTypes(a, b) {
+function withTypes(a, b, c) {
   if (typeof a == "string" && typeof b == "string") { // OK x 2
 
     if (a == b) {     // OK
