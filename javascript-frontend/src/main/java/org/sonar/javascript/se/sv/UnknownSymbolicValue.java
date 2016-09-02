@@ -36,4 +36,9 @@ public enum UnknownSymbolicValue implements SymbolicValue {
     return ImmutableList.of(state);
   }
 
+  @Override
+  public Constraint baseConstraint(ProgramState state) {
+    return Constraint.ANY_VALUE;
+  }
+
 }

@@ -76,7 +76,7 @@ public class LiteralSymbolicValueTest {
 
   @Test(expected = IllegalStateException.class)
   public void unknown_literal_type() throws Exception {
-    LiteralSymbolicValue.get(mock(LiteralTree.class)).constraint(mock(ProgramState.class));
+    LiteralSymbolicValue.get(mock(LiteralTree.class)).baseConstraint(mock(ProgramState.class));
   }
 
   @Test
@@ -90,7 +90,7 @@ public class LiteralSymbolicValueTest {
   }
 
   private Constraint constraint(String source) {
-    return literal(source).constraint(mock(ProgramState.class));
+    return literal(source).baseConstraint(mock(ProgramState.class));
   }
 
   private LiteralSymbolicValue literal(String source) {

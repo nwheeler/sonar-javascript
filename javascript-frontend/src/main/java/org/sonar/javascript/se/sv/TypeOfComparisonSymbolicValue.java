@@ -100,6 +100,11 @@ public class TypeOfComparisonSymbolicValue implements SymbolicValue {
   }
 
   @Override
+  public Constraint baseConstraint(ProgramState state) {
+    return Constraint.BOOLEAN;
+  }
+
+  @Override
   public String toString() {
     return typeOfOperand + " == '" + comparedTypeString + "'";
   }

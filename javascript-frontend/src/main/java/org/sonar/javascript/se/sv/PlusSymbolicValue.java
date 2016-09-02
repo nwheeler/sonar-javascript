@@ -57,11 +57,11 @@ public class PlusSymbolicValue implements SymbolicValue {
   }
 
   @Override
-  public Constraint constraint(ProgramState state) {
+  public Constraint baseConstraint(ProgramState state) {
     Set<Type> numberTypes = EnumSet.of(Type.NUMBER, Type.BOOLEAN);
 
-    Type firstType = firstOperandValue.constraint(state).type();
-    Type secondType = secondOperandValue.constraint(state).type();
+    Type firstType = state.getConstraint(firstOperandValue).type();
+    Type secondType = state.getConstraint(secondOperandValue).type();
 
     if (firstType != null || secondType != null) {
       if (firstType == Type.STRING || secondType == Type.STRING) {

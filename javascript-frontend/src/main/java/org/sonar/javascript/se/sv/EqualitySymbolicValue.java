@@ -81,7 +81,7 @@ public class EqualitySymbolicValue extends RelationalSymbolicValue {
   }
 
   @Override
-  public Constraint constraint(ProgramState state) {
+  public Constraint baseConstraint(ProgramState state) {
     if (state.getConstraint(leftOperand).isIncompatibleWith(state.getConstraint(rightOperand))) {
       if (kind == Kind.STRICT_EQUAL_TO) {
         return Constraint.FALSE;
@@ -90,7 +90,7 @@ public class EqualitySymbolicValue extends RelationalSymbolicValue {
         return Constraint.TRUE;
       }
     }
-    return super.constraint(state);
+    return super.baseConstraint(state);
   }
 
 }

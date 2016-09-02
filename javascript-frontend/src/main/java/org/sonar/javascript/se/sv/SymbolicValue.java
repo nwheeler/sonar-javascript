@@ -27,8 +27,6 @@ public interface SymbolicValue {
 
   List<ProgramState> constrain(ProgramState state, Constraint constraint);
 
-  default Constraint constraint(ProgramState state) {
-    return Constraint.ANY_VALUE;
-  }
+  Constraint baseConstraint(ProgramState state);
 
 }

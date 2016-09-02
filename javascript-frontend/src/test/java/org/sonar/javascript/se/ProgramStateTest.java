@@ -20,6 +20,7 @@
 package org.sonar.javascript.se;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.sonar.javascript.se.sv.SpecialSymbolicValue;
 import org.sonar.javascript.se.sv.SymbolicValue;
 import org.sonar.plugins.javascript.api.symbols.Symbol;
@@ -27,6 +28,8 @@ import org.sonar.plugins.javascript.api.symbols.Symbol.Kind;
 import org.sonar.plugins.javascript.api.tree.Tree;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ProgramStateTest {
 
@@ -65,6 +68,22 @@ public class ProgramStateTest {
     state = state.newSymbolicValue(symbol2, null);
     state = state.constrain(state.getSymbolicValue(symbol2), Constraint.TRUTHY);
     assertThat(state.constrain(state.getSymbolicValue(symbol2), Constraint.NULL)).isNull();
+  }
+
+  @Test
+  public void getConstraint() {
+    SymbolicValue sv1 = mock(SymbolicValue.class);
+    state = state.pushToStack(sv1).assignment(symbol1).removeLastValue();
+
+    when(sv1.baseConstraint(state)).thenReturn(Constraint.ANY_VALUE);
+    assertThat(state.getConstraint(sv1)).isEqualTo(Constraint.ANY_VALUE);
+
+    when(sv1.baseConstraint(state)).thenReturn(Constraint.BOOLEAN);
+    assertThat(state.getConstraint(sv1)).isEqualTo(Constraint.BOOLEAN);
+
+    state = state.constrain(sv1, Constraint.TRUTHY);
+    when(sv1.baseConstraint(Mockito.any(ProgramState.class))).thenReturn(Constraint.BOOLEAN);
+    assertThat(state.getConstraint(sv1)).isEqualTo(Constraint.TRUE);
   }
 
   @Test

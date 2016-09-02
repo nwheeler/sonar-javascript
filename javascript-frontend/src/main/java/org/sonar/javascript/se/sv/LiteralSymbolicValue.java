@@ -50,14 +50,14 @@ public class LiteralSymbolicValue implements SymbolicValue {
 
   @Override
   public List<ProgramState> constrain(ProgramState state, Constraint constraint) {
-    if (constraint(state).isIncompatibleWith(constraint)) {
+    if (baseConstraint(state).isIncompatibleWith(constraint)) {
       return ImmutableList.of();
     }
     return ImmutableList.of(state);
   }
 
   @Override
-  public Constraint constraint(ProgramState state) {
+  public Constraint baseConstraint(ProgramState state) {
     return constraint;
   }
 

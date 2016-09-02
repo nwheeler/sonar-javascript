@@ -180,12 +180,10 @@ public class ProgramState {
   }
 
   public Constraint getConstraint(@Nullable SymbolicValue value) {
-    Constraint constraint = constraints.get(value);
+    Constraint storedConstraint = constraints.get(value);
+    storedConstraint = storedConstraint == null ? Constraint.ANY_VALUE : storedConstraint;
 
-    if (constraint == null && value != null) {
-      constraint = value.constraint(this);
-    }
-    return constraint == null ? Constraint.ANY_VALUE : constraint;
+    return value == null ? storedConstraint : storedConstraint.and(value.baseConstraint(this));
   }
 
   public Constraint getConstraint(@Nullable Symbol symbol) {

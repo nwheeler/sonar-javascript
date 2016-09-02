@@ -44,7 +44,7 @@ public enum SpecialSymbolicValue implements SymbolicValue {
   }
 
   @Override
-  public Constraint constraint(ProgramState state) {
+  public Constraint baseConstraint(ProgramState state) {
     return constraint;
   }
 

@@ -48,4 +48,9 @@ public class SimpleSymbolicValue implements SymbolicValue {
     }
     return ImmutableList.of(newState);
   }
+
+  @Override
+  public Constraint baseConstraint(ProgramState state) {
+    return Constraint.ANY_VALUE;
+  }
 }

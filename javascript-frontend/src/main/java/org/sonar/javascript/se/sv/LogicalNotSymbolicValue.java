@@ -48,7 +48,7 @@ public class LogicalNotSymbolicValue implements SymbolicValue {
   }
 
   @Override
-  public Constraint constraint(ProgramState state) {
+  public Constraint baseConstraint(ProgramState state) {
     Constraint negatedConstraint = state.getConstraint(negatedValue);
     if (negatedConstraint.isStricterOrEqualTo(Constraint.TRUTHY)) {
       return Constraint.FALSE;

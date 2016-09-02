@@ -43,7 +43,7 @@ public class SymbolicValueWithConstraint implements SymbolicValue {
   }
 
   @Override
-  public Constraint constraint(ProgramState state) {
+  public Constraint baseConstraint(ProgramState state) {
     return originalConstraint;
   }
 
