@@ -20,27 +20,36 @@
 package org.sonar.javascript.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.javascript.se.Constraint;
+import org.sonar.javascript.se.ProgramState;
+import org.sonar.javascript.se.SeCheck;
+import org.sonar.javascript.se.Type;
 import org.sonar.plugins.javascript.api.tree.Tree;
+import org.sonar.plugins.javascript.api.tree.Tree.Kind;
 import org.sonar.plugins.javascript.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.javascript.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.javascript.api.visitors.DoubleDispatchVisitorCheck;
 
 @Rule(key = "EqEqEq")
-public class EqEqEqCheck extends DoubleDispatchVisitorCheck {
+public class EqEqEqCheck extends SeCheck {
 
   @Override
-  public void visitBinaryExpression(BinaryExpressionTree tree) {
-    if (!isNullLiteral(tree.leftOperand()) && !isNullLiteral(tree.rightOperand())) {
+  public void beforeBlockElement(ProgramState currentState, Tree element) {
+    if (element.is(Kind.EQUAL_TO, Kind.NOT_EQUAL_TO)) {
+      BinaryExpressionTree equality = (BinaryExpressionTree) element;
+      if (!isNullLiteral(equality.leftOperand()) && !isNullLiteral(equality.rightOperand())) {
+        Constraint rightConstraint = currentState.getConstraint(currentState.peekStack(0));
+        Constraint leftConstraint = currentState.getConstraint(currentState.peekStack(1));
 
-      if (tree.is(Tree.Kind.EQUAL_TO)) {
-        addIssue(tree.operator(), "Replace \"==\" with \"===\".");
+        Type rightType = rightConstraint.type();
+        Type leftType = leftConstraint.type();
 
-      } else if (tree.is(Tree.Kind.NOT_EQUAL_TO)) {
-        addIssue(tree.operator(), "Replace \"!=\" with \"!==\".");
+        if (leftType != null && leftType == rightType) {
+          return;
+        }
+
+        addIssue(equality.operator(), element.is(Kind.EQUAL_TO) ? "Replace \"==\" with \"===\"." : "Replace \"!=\" with \"!==\".");
       }
     }
-
-    super.visitBinaryExpression(tree);
   }
 
   private static boolean isNullLiteral(ExpressionTree expressionTree) {
